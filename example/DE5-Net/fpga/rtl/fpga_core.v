@@ -181,32 +181,29 @@ eth_axis_tx_inst (
     .busy()
 );
 
+axis_fifo_64 #(
+    .ADDR_WIDTH(10),
+    .DATA_WIDTH(64)
+)
+input_fifo (
+    .clk(clk),
+    .rst(rst),
 
+    // AXI input
+    .input_axis_tdata(rx_fifo_udp_payload_tdata),
+    .input_axis_tkeep(rx_fifo_udp_payload_tkeep),
+    .input_axis_tvalid(rx_fifo_udp_payload_tvalid),
+    .input_axis_tready(rx_fifo_udp_payload_tready),
+    .input_axis_tlast(rx_fifo_udp_payload_tlast),
+    .input_axis_tuser(rx_fifo_udp_payload_tuser),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // AXI output
+    .output_axis_tdata(tx_fifo_udp_payload_tdata),
+    .output_axis_tkeep(tx_fifo_udp_payload_tkeep),
+    .output_axis_tvalid(tx_fifo_udp_payload_tvalid),
+    .output_axis_tready(tx_fifo_udp_payload_tready),
+    .output_axis_tlast(tx_fifo_udp_payload_tlast),
+    .output_axis_tuser(tx_fifo_udp_payload_tuser)
+);
 
 endmodule
