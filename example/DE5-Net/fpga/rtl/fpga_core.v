@@ -86,6 +86,13 @@ wire tx_axis_tready;
 wire tx_axis_tlast;
 wire tx_axis_tuser;
 
+assign sfp_b_txd = 64'h0707070707070707;
+assign sfp_b_txc = 8'hff;
+assign sfp_c_txd = 64'h0707070707070707;
+assign sfp_c_txc = 8'hff;
+assign sfp_d_txd = 64'h0707070707070707;
+assign sfp_d_txc = 8'hff;
+
 eth_mac_10g_fifo #(
     .ENABLE_PADDING(1),
     .ENABLE_DIC(1),
@@ -126,61 +133,6 @@ eth_mac_10g_fifo_inst (
     .ifg_delay(8'd12)
 );
 
-eth_axis_rx_64
-eth_axis_rx_inst (
-    .clk(clk),
-    .rst(rst),
-    // AXI input
-    .input_axis_tdata(rx_axis_tdata),
-    .input_axis_tkeep(rx_axis_tkeep),
-    .input_axis_tvalid(rx_axis_tvalid),
-    .input_axis_tready(rx_axis_tready),
-    .input_axis_tlast(rx_axis_tlast),
-    .input_axis_tuser(rx_axis_tuser),
-    // Ethernet frame output
-    .output_eth_hdr_valid(rx_eth_hdr_valid),
-    .output_eth_hdr_ready(rx_eth_hdr_ready),
-    .output_eth_dest_mac(rx_eth_dest_mac),
-    .output_eth_src_mac(rx_eth_src_mac),
-    .output_eth_type(rx_eth_type),
-    .output_eth_payload_tdata(rx_eth_payload_tdata),
-    .output_eth_payload_tkeep(rx_eth_payload_tkeep),
-    .output_eth_payload_tvalid(rx_eth_payload_tvalid),
-    .output_eth_payload_tready(rx_eth_payload_tready),
-    .output_eth_payload_tlast(rx_eth_payload_tlast),
-    .output_eth_payload_tuser(rx_eth_payload_tuser),
-    // Status signals
-    .busy(),
-    .error_header_early_termination()
-);
-
-eth_axis_tx_64
-eth_axis_tx_inst (
-    .clk(clk),
-    .rst(rst),
-    // Ethernet frame input
-    .input_eth_hdr_valid(tx_eth_hdr_valid),
-    .input_eth_hdr_ready(tx_eth_hdr_ready),
-    .input_eth_dest_mac(tx_eth_dest_mac),
-    .input_eth_src_mac(tx_eth_src_mac),
-    .input_eth_type(tx_eth_type),
-    .input_eth_payload_tdata(tx_eth_payload_tdata),
-    .input_eth_payload_tkeep(tx_eth_payload_tkeep),
-    .input_eth_payload_tvalid(tx_eth_payload_tvalid),
-    .input_eth_payload_tready(tx_eth_payload_tready),
-    .input_eth_payload_tlast(tx_eth_payload_tlast),
-    .input_eth_payload_tuser(tx_eth_payload_tuser),
-    // AXI output
-    .output_axis_tdata(tx_axis_tdata),
-    .output_axis_tkeep(tx_axis_tkeep),
-    .output_axis_tvalid(tx_axis_tvalid),
-    .output_axis_tready(tx_axis_tready),
-    .output_axis_tlast(tx_axis_tlast),
-    .output_axis_tuser(tx_axis_tuser),
-    // Status signals
-    .busy()
-);
-
 axis_fifo_64 #(
     .ADDR_WIDTH(10),
     .DATA_WIDTH(64)
@@ -190,20 +142,20 @@ input_fifo (
     .rst(rst),
 
     // AXI input
-    .input_axis_tdata(rx_fifo_udp_payload_tdata),
-    .input_axis_tkeep(rx_fifo_udp_payload_tkeep),
-    .input_axis_tvalid(rx_fifo_udp_payload_tvalid),
-    .input_axis_tready(rx_fifo_udp_payload_tready),
-    .input_axis_tlast(rx_fifo_udp_payload_tlast),
-    .input_axis_tuser(rx_fifo_udp_payload_tuser),
+    .input_axis_tdata(rx_axis_tdata),
+    .input_axis_tkeep(rx_axis_tkeep),
+    .input_axis_tvalid(rx_axis_tvalid),
+    .input_axis_tready(rx_axis_tready),
+    .input_axis_tlast(rx_axis_tlast),
+    .input_axis_tuser(rx_axis_tuser),
 
     // AXI output
-    .output_axis_tdata(tx_fifo_udp_payload_tdata),
-    .output_axis_tkeep(tx_fifo_udp_payload_tkeep),
-    .output_axis_tvalid(tx_fifo_udp_payload_tvalid),
-    .output_axis_tready(tx_fifo_udp_payload_tready),
-    .output_axis_tlast(tx_fifo_udp_payload_tlast),
-    .output_axis_tuser(tx_fifo_udp_payload_tuser)
+    .output_axis_tdata(tx_axis_tdata),
+    .output_axis_tkeep(tx_axis_tkeep),
+    .output_axis_tvalid(tx_axis_tvalid),
+    .output_axis_tready(tx_axis_tready),
+    .output_axis_tlast(tx_axis_tlast),
+    .output_axis_tuser(tx_axis_tuser)
 );
 
 endmodule
