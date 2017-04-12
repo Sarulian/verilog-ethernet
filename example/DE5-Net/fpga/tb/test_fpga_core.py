@@ -215,83 +215,70 @@ def bench():
 
         sfp_a_source.send(b'\x55\x55\x55\x55\x55\x55\x55\xD5'+test_frame.build_eth().build_axis_fcs().data)
 
-        # wait for ARP request packet
-        # while sfp_a_sink.empty():
-        #     yield clk.posedge
+        yield delay(100)
 
-        # rx_frame = sfp_a_sink.recv()
-        # check_eth_frame = eth_ep.EthFrame()
-        # check_eth_frame.parse_axis_fcs(rx_frame.data[8:])
-        # check_frame = arp_ep.ARPFrame()
-        # check_frame.parse_eth(check_eth_frame)
+        print("test 2: test UDP RX packet")
+        current_test.next = 2
 
-        # print(check_frame)
+        test_frame = udp_ep.UDPFrame()
+        test_frame.eth_dest_mac = 0x020000000000
+        test_frame.eth_src_mac = 0xDAD1D2D3D4D5
+        test_frame.eth_type = 0x0800
+        test_frame.ip_version = 4
+        test_frame.ip_ihl = 5
+        test_frame.ip_dscp = 0
+        test_frame.ip_ecn = 0
+        test_frame.ip_length = None
+        test_frame.ip_identification = 0
+        test_frame.ip_flags = 2
+        test_frame.ip_fragment_offset = 0
+        test_frame.ip_ttl = 64
+        test_frame.ip_protocol = 0x11
+        test_frame.ip_header_checksum = None
+        test_frame.ip_source_ip = 0xc0a80181
+        test_frame.ip_dest_ip = 0xc0a80180
+        test_frame.udp_source_port = 5678
+        test_frame.udp_dest_port = 1234
+        test_frame.payload = bytearray(range(32))
+        test_frame.build()
 
-        # assert check_frame.eth_dest_mac == 0xFFFFFFFFFFFF
-        # assert check_frame.eth_src_mac == 0x020000000000
-        # assert check_frame.eth_type == 0x0806
-        # assert check_frame.arp_htype == 0x0001
-        # assert check_frame.arp_ptype == 0x0800
-        # assert check_frame.arp_hlen == 6
-        # assert check_frame.arp_plen == 4
-        # assert check_frame.arp_oper == 1
-        # assert check_frame.arp_sha == 0x020000000000
-        # assert check_frame.arp_spa == 0xc0a80180
-        # assert check_frame.arp_tha == 0x000000000000
-        # assert check_frame.arp_tpa == 0xc0a80181
+        sfp_a_source.send(b'\x55\x55\x55\x55\x55\x55\x55\xD5'+test_frame.build_eth().build_axis_fcs().data)
 
-        # generate response
-        # arp_frame = arp_ep.ARPFrame()
-        # arp_frame.eth_dest_mac = 0x020000000000
-        # arp_frame.eth_src_mac = 0xDAD1D2D3D4D5
-        # arp_frame.eth_type = 0x0806
-        # arp_frame.arp_htype = 0x0001
-        # arp_frame.arp_ptype = 0x0800
-        # arp_frame.arp_hlen = 6
-        # arp_frame.arp_plen = 4
-        # arp_frame.arp_oper = 2
-        # arp_frame.arp_sha = 0xDAD1D2D3D4D5
-        # arp_frame.arp_spa = 0xc0a80181
-        # arp_frame.arp_tha = 0x020000000000
-        # arp_frame.arp_tpa = 0xc0a80180
+        yield delay(100)
 
-        # sfp_a_source.send(b'\x55\x55\x55\x55\x55\x55\x55\xD5'+arp_frame.build_eth().build_axis_fcs().data)
+        print("test 3: test UDP RX packet")
+        current_test.next = 3
 
-        # while sfp_a_sink.empty():
-        #     yield clk.posedge
+        test_frame = udp_ep.UDPFrame()
+        test_frame.eth_dest_mac = 0x020000000000
+        test_frame.eth_src_mac = 0xDAD1D2D3D4D5
+        test_frame.eth_type = 0x0800
+        test_frame.ip_version = 4
+        test_frame.ip_ihl = 5
+        test_frame.ip_dscp = 0
+        test_frame.ip_ecn = 0
+        test_frame.ip_length = None
+        test_frame.ip_identification = 0
+        test_frame.ip_flags = 2
+        test_frame.ip_fragment_offset = 0
+        test_frame.ip_ttl = 64
+        test_frame.ip_protocol = 0x11
+        test_frame.ip_header_checksum = None
+        test_frame.ip_source_ip = 0xc0a80181
+        test_frame.ip_dest_ip = 0xc0a80180
+        test_frame.udp_source_port = 5678
+        test_frame.udp_dest_port = 1234
+        test_frame.payload = bytearray(range(32))
+        test_frame.build()
 
-        # rx_frame = sfp_a_sink.recv()
-        # check_eth_frame = eth_ep.EthFrame()
-        # check_eth_frame.parse_axis_fcs(rx_frame.data[8:])
-        # check_frame = udp_ep.UDPFrame()
-        # check_frame.parse_eth(check_eth_frame)
-
-        # print(check_frame)
-
-        # assert check_frame.eth_dest_mac == 0xDAD1D2D3D4D5
-        # assert check_frame.eth_src_mac == 0x020000000000
-        # assert check_frame.eth_type == 0x0800
-        # assert check_frame.ip_version == 4
-        # assert check_frame.ip_ihl == 5
-        # assert check_frame.ip_dscp == 0
-        # assert check_frame.ip_ecn == 0
-        # assert check_frame.ip_identification == 0
-        # assert check_frame.ip_flags == 2
-        # assert check_frame.ip_fragment_offset == 0
-        # assert check_frame.ip_ttl == 64
-        # assert check_frame.ip_protocol == 0x11
-        # assert check_frame.ip_source_ip == 0xc0a80180
-        # assert check_frame.ip_dest_ip == 0xc0a80181
-        # assert check_frame.udp_source_port == 1234
-        # assert check_frame.udp_dest_port == 5678
-        # assert check_frame.payload.data == bytearray(range(32))
+        sfp_a_source.send(b'\x55\x55\x55\x55\x55\x55\x55\xD5'+test_frame.build_eth().build_axis_fcs().data)
 
         yield delay(100)
 
         assert sfp_a_source.empty()
         assert sfp_a_sink.empty()
 
-        yield delay(200)
+        yield delay(300)
 
         raise StopSimulation
 
