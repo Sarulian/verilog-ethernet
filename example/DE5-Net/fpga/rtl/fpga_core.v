@@ -108,6 +108,7 @@ eth_mac_10g_fifo_inst (
     .logic_clk(clk),
     .logic_rst(rst),
 
+    // axis input
     .tx_axis_tdata(tx_axis_tdata),
     .tx_axis_tkeep(tx_axis_tkeep),
     .tx_axis_tvalid(tx_axis_tvalid),
@@ -115,6 +116,7 @@ eth_mac_10g_fifo_inst (
     .tx_axis_tlast(tx_axis_tlast),
     .tx_axis_tuser(tx_axis_tuser),
 
+    // axis output
     .rx_axis_tdata(rx_axis_tdata),
     .rx_axis_tkeep(rx_axis_tkeep),
     .rx_axis_tvalid(rx_axis_tvalid),
@@ -122,8 +124,11 @@ eth_mac_10g_fifo_inst (
     .rx_axis_tlast(rx_axis_tlast),
     .rx_axis_tuser(rx_axis_tuser),
 
+    // xgmii input
     .xgmii_rxd(sfp_a_rxd),
     .xgmii_rxc(sfp_a_rxc),
+
+    // xgmii output
     .xgmii_txd(sfp_a_txd),
     .xgmii_txc(sfp_a_txc),
     
