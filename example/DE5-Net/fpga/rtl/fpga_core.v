@@ -71,7 +71,23 @@ module fpga_core
     input  wire [7:0]  sfp_d_rxc
 );
 
-// AXI between MAC and Ethernet modules
+wire [7:0] control;
+wire [63:0] data;
+
+assign control = sfp_a_rxc;
+assign data = sfp_a_rxd; 
+
+assign sfp_a_txc = control;
+assign sfp_a_txd = data;
+
+assign sfp_b_txd = 64'h0707070707070707;
+assign sfp_b_txc = 8'hff;
+assign sfp_c_txd = 64'h0707070707070707;
+assign sfp_c_txc = 8'hff;
+assign sfp_d_txd = 64'h0707070707070707;
+assign sfp_d_txc = 8'hff;
+
+/*// AXI between MAC and Ethernet modules
 wire [63:0] rx_axis_tdata;
 wire [7:0] rx_axis_tkeep;
 wire rx_axis_tvalid;
@@ -161,6 +177,6 @@ input_fifo (
     .output_axis_tready(tx_axis_tready),
     .output_axis_tlast(tx_axis_tlast),
     .output_axis_tuser(tx_axis_tuser)
-);
+);*/
 
 endmodule
