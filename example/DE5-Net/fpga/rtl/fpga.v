@@ -70,6 +70,9 @@ module fpga (
     // Si570
     inout  wire        CLOCK_SCL,
     inout  wire        CLOCK_SDA,
+    // SMA Clock
+    output wire        SMA_CLKIN,
+    output wire        SMA_CLKOUT,
     // 10G Ethernet
     input  wire        SFPA_LOS,
     input  wire        SFPA_TXFAULT,
@@ -109,6 +112,14 @@ module fpga (
     output wire        SFPD_TX_p,
     input  wire        SFP_REFCLK_P
 );
+// Write block_lock and hi_ber to SMA pins
+
+wire [3:0] hi_ber;
+wire [3:0] block_lock;
+
+assign SMA_CLKOUT = hi_ber[1];
+assign SMA_CLKIN  = hi_ber[2];
+
 
 // Clock and reset
 
@@ -329,7 +340,10 @@ phy_inst (
     .phy_mgmt_writedata(32'd0),
 
     .reconfig_from_xcvr(phy_reconfig_from_xcvr),
-    .reconfig_to_xcvr(phy_reconfig_to_xcvr)
+    .reconfig_to_xcvr(phy_reconfig_to_xcvr),
+
+    .rx_block_lock(block_lock),
+    .rx_hi_ber(hi_ber)
 );
 
 phy_reconfig
