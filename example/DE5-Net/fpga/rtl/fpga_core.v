@@ -86,6 +86,29 @@ wire tx_axis_tready;
 wire tx_axis_tlast;
 wire tx_axis_tuser;
 
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= rx_axis_tvalid;
+        if (rx_axis_tvalid & ~valid_last) begin
+            led_reg <= rx_axis_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign led_bkt = led_reg;
+assign led_hex0_d = 7'h00;
+assign led_hex0_dp = 1'b0;
+assign led_hex1_d = 7'h00;
+assign led_hex1_dp = 1'b0;
+
 assign sfp_b_txd = 64'h0707070707070707;
 assign sfp_b_txc = 8'hff;
 assign sfp_c_txd = 64'h0707070707070707;
