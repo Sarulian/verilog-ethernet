@@ -71,8 +71,8 @@ module fpga (
     inout  wire        CLOCK_SCL,
     inout  wire        CLOCK_SDA,
     // SMA Clock
-    output wire        SMA_CLKIN,
-    output wire        SMA_CLKOUT,
+    inout  wire        SMA_CLKIN,
+    inout  wire        SMA_CLKOUT,
     // 10G Ethernet
     input  wire        SFPA_LOS,
     input  wire        SFPA_TXFAULT,
@@ -117,8 +117,8 @@ module fpga (
 wire [3:0] hi_ber;
 wire [3:0] block_lock;
 
-assign SMA_CLKOUT = hi_ber[1];
-assign SMA_CLKIN  = hi_ber[2];
+assign SMA_CLKOUT = hi_ber[0];
+assign SMA_CLKIN  = SFPA_LOS;
 
 
 // Clock and reset
