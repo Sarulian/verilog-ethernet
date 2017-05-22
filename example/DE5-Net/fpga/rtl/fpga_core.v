@@ -86,6 +86,19 @@ wire tx_axis_tready;
 wire tx_axis_tlast;
 wire tx_axis_tuser;
 
+// Generate control idles
+wire [63:0] idle_axis_tdata;
+wire [7:0] idle_axis_tkeep;
+wire idle_axis_tvalid;
+wire idle_axis_tready;
+wire idle_axis_tlast;
+wire idle_axis_tuser;
+
+assign idle_axis_tdata = 64'h7777777777777777;
+assign idle_axis_tvalid = 1'b1;
+// assign idle_axis_tready = 1'b1;
+assign idle_axis_tlast = 1'b1;
+
 // Place first payload byte onto LEDs
 reg valid_last = 0;
 reg [7:0] led_reg = 0;
@@ -161,6 +174,7 @@ eth_mac_10g_fifo_inst (
     .ifg_delay(8'd12)
 );
 
+/*
 axis_fifo_64 #(
     .ADDR_WIDTH(10),
     .DATA_WIDTH(64)
@@ -169,7 +183,7 @@ input_fifo (
     .clk(clk),
     .rst(rst),
 
-    // AXI input
+    // AXIS input
     .input_axis_tdata(rx_axis_tdata),
     .input_axis_tkeep(rx_axis_tkeep),
     .input_axis_tvalid(rx_axis_tvalid),
@@ -177,13 +191,62 @@ input_fifo (
     .input_axis_tlast(rx_axis_tlast),
     .input_axis_tuser(rx_axis_tuser),
 
-    // AXI output
+    // AXIS output
     .output_axis_tdata(tx_axis_tdata),
     .output_axis_tkeep(tx_axis_tkeep),
     .output_axis_tvalid(tx_axis_tvalid),
     .output_axis_tready(tx_axis_tready),
     .output_axis_tlast(tx_axis_tlast),
     .output_axis_tuser(tx_axis_tuser)
+);
+*/
+
+axis_arb_mux_64_4 #(
+    .DATA_WIDTH(64)
+)
+output_mux (
+    .clk(clk),
+    .rst(rst),
+
+    // AXIS input
+    .input_0_axis_tdata(rx_axis_tdata),
+    .input_0_axis_tkeep(rx_axis_tkeep),
+    .input_0_axis_tvalid(rx_axis_tvalid),
+    .input_0_axis_tready(rx_axis_tready),
+    .input_0_axis_tlast(rx_axis_tlast),
+    .input_0_axis_tuser(rx_axis_tuser),
+
+    // Control idle chars
+    .input_1_axis_tdata(idle_axis_tdata),
+    .input_1_axis_tkeep(idle_axis_tkeep),
+    .input_1_axis_tvalid(idle_axis_tvalid),
+    .input_1_axis_tready(idle_axis_tready),
+    .input_1_axis_tlast(idle_axis_tlast),
+    .input_1_axis_tuser(idle_axis_tuser),
+
+    // Disable other 2 inputs
+    .input_2_axis_tdata(),
+    .input_2_axis_tkeep(),
+    .input_2_axis_tvalid(1'b0),
+    .input_2_axis_tready(),
+    .input_2_axis_tlast(),
+    .input_2_axis_tuser(),   
+
+    .input_3_axis_tdata(),
+    .input_3_axis_tkeep(),
+    .input_3_axis_tvalid(1'b0),
+    .input_3_axis_tready(),
+    .input_3_axis_tlast(),
+    .input_3_axis_tuser(),
+
+    // AXIS output
+    .output_axis_tdata(tx_axis_tdata),
+    .output_axis_tkeep(tx_axis_tkeep),
+    .output_axis_tvalid(tx_axis_tvalid),
+    .output_axis_tready(tx_axis_tready),
+    .output_axis_tlast(tx_axis_tlast),
+    .output_axis_tuser(tx_axis_tuser)
+
 );
 
 endmodule
